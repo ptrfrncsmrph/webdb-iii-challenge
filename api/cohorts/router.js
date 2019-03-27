@@ -12,7 +12,7 @@ router.get("/", (_req, res) => {
     })
 })
 
-router.get("/:id", (_req, res) => {
+router.get("/:id", (req, res) => {
   const { id } = req.params
   db("cohorts")
     .where({ id })
@@ -21,6 +21,18 @@ router.get("/:id", (_req, res) => {
     })
     .then(([cohort]) => {
       res.status(200).json(cohort)
+    })
+})
+
+router.get("/:id/students", (req, res) => {
+  const { id } = req.params
+  db("students")
+    .where({ cohort_id: id })
+    .catch(err => {
+      res.status(404).json(err)
+    })
+    .then(students => {
+      res.status(200).json(students)
     })
 })
 
